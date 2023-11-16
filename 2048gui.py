@@ -89,64 +89,71 @@ def add_new_tile(board):
     if empty_spots:
         row, col = random.choice(empty_spots)
         board[row][col] = random.choice([2, 4])
-
+      
+def is_valid_move(original_board, new_board):
+  return original_board != new_board
+  
 # Function to move tiles to the left
 def move_left(board, score):
-    moved = False
-    for row in range(GRID_SIZE):
-        merged_row, row_score, row_moved = merge_tiles(board[row])
-        if row_moved:
-            moved = True
-        board[row] = merged_row
-        score += row_score
-    if moved:
-        add_new_tile(board)
-    return score
+  original_board = [row[:] for row in board]  # Create a copy of the original board
+  moved = False
+  for row in range(GRID_SIZE):
+    merged_row, row_score, row_moved = merge_tiles(board[row])
+    if row_moved:
+        moved = True
+    board[row] = merged_row
+    score += row_score
+  if moved and is_valid_move(original_board, board):
+    add_new_tile(board)
+  return score
 
 # Function to move tiles to the right
 def move_right(board, score):
-    moved = False
-    for row in range(GRID_SIZE):
-        merged_row, row_score, row_moved = merge_tiles(board[row][::-1])
-        if row_moved:
-            moved = True
-        board[row] = merged_row[::-1]
-        score += row_score
-    if moved:
-        add_new_tile(board)
-    return score
+  original_board = [row[:] for row in board]
+  moved = False
+  for row in range(GRID_SIZE):
+    merged_row, row_score, row_moved = merge_tiles(board[row][::-1])
+    if row_moved:
+        moved = True
+    board[row] = merged_row[::-1]
+    score += row_score
+  if moved and is_valid_move(original_board, board):
+    add_new_tile(board)
+  return score
 
 # Function to move tiles up
 def move_up(board, score):
-    moved = False
-    for col in range(GRID_SIZE):
-        column = [board[row][col] for row in range(GRID_SIZE)]
-        merged_column, col_score, col_moved = merge_tiles(column)
-        if col_moved:
-            moved = True
-        for row in range(GRID_SIZE):
-            board[row][col] = merged_column[row]
-        score += col_score
-    if moved:
-        add_new_tile(board)
-    return score
+  original_board = [row[:] for row in board]
+  moved = False
+  for col in range(GRID_SIZE):
+    column = [board[row][col] for row in range(GRID_SIZE)]
+    merged_column, col_score, col_moved = merge_tiles(column)
+    if col_moved:
+        moved = True
+    for row in range(GRID_SIZE):
+        board[row][col] = merged_column[row]
+    score += col_score
+  if moved and is_valid_move(original_board, board):
+    add_new_tile(board)
+  return score
 
 # Function to move tiles down
 def move_down(board, score):
-    moved = False
-    for col in range(GRID_SIZE):
-        column = [board[row][col] for row in range(GRID_SIZE)]
-        reversed_column = column[::-1]
-        merged_column, col_score, col_moved = merge_tiles(reversed_column)
-        if col_moved:
-            moved = True
-        reversed_column = merged_column[::-1]
-        for row in range(GRID_SIZE):
-            board[row][col] = reversed_column[row]
-        score += col_score
-    if moved:
-        add_new_tile(board)
-    return score
+  original_board = [row[:] for row in board]
+  moved = False
+  for col in range(GRID_SIZE):
+    column = [board[row][col] for row in range(GRID_SIZE)]
+    reversed_column = column[::-1]
+    merged_column, col_score, col_moved = merge_tiles(reversed_column)
+    if col_moved:
+        moved = True
+    reversed_column = merged_column[::-1]
+    for row in range(GRID_SIZE):
+        board[row][col] = reversed_column[row]
+    score += col_score
+  if moved and is_valid_move(original_board, board):
+    add_new_tile(board)
+  return score
 
 # Function to merge adjacent tiles with the same value
 def merge_tiles(row):
