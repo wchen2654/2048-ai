@@ -137,6 +137,7 @@ def is_valid_move(original_board, new_board):
 # Function to move tiles to the left
 def move_left(board, score, test):
     original_board = [row[:] for row in board]  # Create a copy of the original board
+    original_score = score
     moved = False
     for row in range(GRID_SIZE):
         merged_row, row_score, row_moved = merge_tiles(board[row])
@@ -147,13 +148,14 @@ def move_left(board, score, test):
     if not test and moved and is_valid_move(original_board, board):
         add_new_tile(board)
     if test:
-        return 0
+        return original_score
     else:
         return score
 
 # Function to move tiles to the right
 def move_right(board, score, test):
     original_board = [row[:] for row in board]
+    original_score = score
     moved = False
     for row in range(GRID_SIZE):
         merged_row, row_score, row_moved = merge_tiles(board[row][::-1])
@@ -164,13 +166,14 @@ def move_right(board, score, test):
     if not test and moved and is_valid_move(original_board, board):
         add_new_tile(board)
     if test:
-        return 0
+        return original_score
     else:
         return score
 
 # Function to move tiles up
 def move_up(board, score, test):
     original_board = [row[:] for row in board]
+    original_score = score
     moved = False
     for col in range(GRID_SIZE):
         column = [board[row][col] for row in range(GRID_SIZE)]
@@ -183,13 +186,14 @@ def move_up(board, score, test):
     if not test and moved and is_valid_move(original_board, board):
         add_new_tile(board)
     if test:
-        return 0
+        return original_score
     else:
         return score
 
 # Function to move tiles down
 def move_down(board, score, test):
     original_board = [row[:] for row in board]
+    original_score = score
     moved = False
     for col in range(GRID_SIZE):
         column = [board[row][col] for row in range(GRID_SIZE)]
@@ -204,7 +208,7 @@ def move_down(board, score, test):
     if not test and moved and is_valid_move(original_board, board):
         add_new_tile(board)
     if test:
-        return 0
+        return original_score
     else:
         return score
 
