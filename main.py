@@ -333,11 +333,17 @@ while not game_over():
         updates += 1
     else:
         print("No valid move found for the AI!")
-        break
-    
+        break  # Exit the game loop when no valid move is found for AI
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
 
     update_display(board, score)
+
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
