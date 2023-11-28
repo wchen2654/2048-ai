@@ -276,16 +276,30 @@ def expectimax(board, depth, maximizing_player):
 def heuristic(board):
     empty_tiles_count = empty_tiles()
     max_tile_value = max(max(row) for row in board)
-    smoothness = 0
+    smoothness_monotonicity = 3
+    corner_edge = 0
+    
+    # Smoothness and Monotonicity calculation
     for i in range(4):
         for j in range(4):
             if board[i][j] != 0:
-                for direction in [(0, 1), (1, 0)]:
-                    di, dj = direction
-                    new_i, new_j = i + di, j + dj
-                    if 0 <= new_i < 4 and 0 <= new_j < 4 and board[new_i][new_j] != 0:
-                        smoothness -= abs(board[i][j] - board[new_i][new_j])
-    return empty_tiles_count * 100 + max_tile_value * 100 + smoothness
+                tile_value = board[i][j]
+                smoothness_monotonicity -= abs(tile_value - max_tile_value)
+
+                if j < 3:
+                    smoothness_monotonicity -= abs(board[i][j] - board[i][j + 1])
+                if i < 3:
+                    smoothness_monotonicity -= abs(board[i][j] - board[i + 1][j])
+
+                # Corner and Edge Tiles evaluation
+                if (i == 0 or i == 3) and (j == 0 or j == 3):
+                    corner_edge += tile_value
+                elif i == 0 or i == 3 or j == 0 or j == 3:
+                    corner_edge += tile_value / 2
+
+    heuristic_score = (empty_tiles_count * 100) + (max_tile_value * 100) + (smoothness_monotonicity * 0.1) + (corner_edge * 2)
+    return heuristic_score
+
 
 # This function will return the number of empty tiles
 def empty_tiles():
